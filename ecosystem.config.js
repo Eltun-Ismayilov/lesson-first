@@ -11,7 +11,8 @@ module.exports = {
         DB_PASS: null,
         PORT: 5432,
         DB_DIALECT:'postgres',
-        DB_NAME:'lesson-nest'
+        DB_NAME:'lesson-nest',
+        GOOGLE_RECAPTCHA_SECRET_KEY:'6LeUu-MfAAAAAM32s149E_pYW3uIjxg3-CrqnYEb'
       },
     }
   ]
