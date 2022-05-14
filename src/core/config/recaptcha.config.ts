@@ -5,5 +5,5 @@ export const recatchaConfig={
     response: req => req.headers.recaptcha,
     skipIf: process.env.NODE_ENV !== 'production',
     network: GoogleRecaptchaNetwork.Recaptcha,
-    score:0.8
+    score:0.3
 }

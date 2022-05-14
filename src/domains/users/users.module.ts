@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { UserController } from './controllers/usersrecatcha-config/usersrecatcha-config.controller';
+import { UserController } from './controllers/users.controller';
 import { Users } from './models/users.model';
-import { UsersService } from './serices/users/users.service';
+import { UsersService } from './serices/users.service';
 
 @Module({
   controllers: [UserController],
