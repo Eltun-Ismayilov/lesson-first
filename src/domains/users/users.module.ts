@@ -7,6 +7,7 @@ import { UsersService } from './serices/users.service';
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
-  imports:[SequelizeModule.forFeature([Users])]
+  imports:[SequelizeModule.forFeature([Users])],
+  exports:[UsersService]
 })
 export class UsersModule {}

@@ -11,8 +11,8 @@ import { AuthModule } from './core/auth/auth.module';
   imports: [
     SequelizeModule.forRoot(dbConfig),
     GoogleRecaptchaModule.forRoot(recatchaConfig),
-    UsersModule,
     AuthModule,
+    UsersModule
   ],
 })
 export class AppModule {}

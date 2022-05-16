@@ -11,7 +11,6 @@ export const dbConfig:SequelizeModuleOptions={
     database: 'Nest-js',
     synchronize: true,
     sync: {
-        force:true,
         alter: true
     },
     autoLoadModels: true,

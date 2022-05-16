@@ -1,5 +1,4 @@
 import * as berypt from 'bcrypt'
-import { retry } from 'rxjs';
 
 export async function encrypt(pass:string)
 {

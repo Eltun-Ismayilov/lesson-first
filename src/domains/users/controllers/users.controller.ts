@@ -13,6 +13,8 @@ import { UsersService } from '../serices/users.service';
 export class UsersController {
     constructor(private service: UsersService) { }
     //1
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({
         summary: 'List of Users',
         description: '[Public] Get list of Users',
@@ -22,6 +24,8 @@ export class UsersController {
         return await this.service.Get();
     }
     //2
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({
         summary: 'Detils of given User',
         description: '[Public] Detils of given User',
@@ -32,8 +36,8 @@ export class UsersController {
         return await this.service.Details(params.id);
     }
     //3
-    @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+   
+  
     @ApiOperation({
         summary: 'Create User',
         description: '[Public] Create Users',
@@ -43,6 +47,8 @@ export class UsersController {
         return await this.service.Create(body);
     }
     //4
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({
         summary: 'Update User',
         description: '[AuthRequired] Update Users',
@@ -53,6 +59,8 @@ export class UsersController {
         return await this.service.Put(params.id, body);
     }
     //5
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({
         summary: 'Delete User',
         description: '[AuthRequired] Delete Users',

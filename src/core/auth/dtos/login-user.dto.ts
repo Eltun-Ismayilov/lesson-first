@@ -13,7 +13,7 @@ export class LoginUserDto{
     @ApiProperty({
         description:"Password of user",
     })
-    @IsEmail()
+  
     @MinLength(4)
     public password:string 
 
