@@ -5,14 +5,14 @@ import { Users } from '../models/users.model';
 import { Response } from '../../../core/concrete/response'
 import { CreateUsersDto } from '../dtos/create-users.dto';
 import { UpdateUsersDto } from '../dtos/update-users.dto';
+import { LoginUserDto } from 'src/core/auth/dtos/login-user.dto';
+import { encrypt } from 'src/core/auth/hashers/encryption';
 
 
 @Injectable()
 export class UsersService {
     constructor(@InjectModel(Users) private model: typeof Users) { }
-
-
-    async list(): Promise<Response<UsersDso[]>> {
+    async Get(): Promise<Response<UsersDso[]>> {
         const users = await this.model.findAll({
             attributes: ['id', 'name', 'lastname', 'patronymic', 'email'],
             where: {
@@ -21,8 +21,7 @@ export class UsersService {
         });
         return new Response<UsersDso[]>(users);
     }
-
-    async get(id: number): Promise<Response<UsersDso>> {
+    async Details(id: number): Promise<Response<UsersDso>> {
         const user = await this.model.findOne({
             attributes: ['id', 'name', 'lastname', 'patronymic', 'email'],
             where: {
@@ -32,24 +31,38 @@ export class UsersService {
         });
         return new Response<UsersDso>(user);
     }
-
     async Create(user: CreateUsersDto): Promise<Response<UsersDso>> {
-        const users = await this.model.create({ ...user, isActive: true });
+        const users = await this.model.create(
+            {
+                ...user,
+                password: await encrypt(user.password),
+                isActive: true
+            }
+        );
         return new Response<Users>(users);
     }
-
-    async put(id: number, user: UpdateUsersDto) {
+    async Put(id: number, user: UpdateUsersDto) {
         const users = await this.model.update(
-            { ...user, isActive: true },
+            {
+                ...user,
+                isActive: true,
+                password: await encrypt(user.password),
+            },
             { where: { id } },
         );
         return users;
     }
-
-    async delete(id: number) {
+    async Delete(id: number) {
         const user = await this.model.findOne({ where: { id } });
         const deleted = await this.model.update({ ...user, isActive: false }, { where: { id } });
         return deleted;
     }
-
+    public async findByEmail(dto: LoginUserDto) {
+        return await this.model.findOne({
+            where: {
+                email: dto.email,
+                isActive: true
+            }
+        })
+    }
 }

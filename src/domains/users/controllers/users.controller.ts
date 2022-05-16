@@ -1,12 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/core/auth/guard/auth.guard';
 import { CreateUsersDto } from '../dtos/create-users.dto';
 import { UpdateUsersDto } from '../dtos/update-users.dto';
 import { UsersService } from '../serices/users.service';
 
 
 @ApiTags('Users')
-@Controller('UserController')
+@Controller({path:'UserController',version:'1'})
 
 export class UsersController {
     constructor(private service: UsersService) { }
@@ -17,7 +19,7 @@ export class UsersController {
     })
     @Get()
     async list() {
-        return await this.service.list();
+        return await this.service.Get();
     }
     //2
     @ApiOperation({
@@ -27,9 +29,11 @@ export class UsersController {
     @ApiParam({ name: 'id' })
     @Get(':id')
     async get(@Param() params) {
-        return await this.service.get(params.id);
+        return await this.service.Details(params.id);
     }
     //3
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({
         summary: 'Create User',
         description: '[Public] Create Users',
@@ -46,7 +50,7 @@ export class UsersController {
     @ApiParam({ name: 'id' })
     @Put(':id')
     async put(@Param() params, @Body() body: UpdateUsersDto) {
-        return await this.service.put(params.id, body);
+        return await this.service.Put(params.id, body);
     }
     //5
     @ApiOperation({
@@ -56,8 +60,6 @@ export class UsersController {
     @ApiParam({ name: 'id' })
     @Delete(':id')
     async delete(@Param() params) {
-        return await this.service.delete(params.id);
+        return await this.service.Delete(params.id);
     }
-
-
 }

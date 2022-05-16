@@ -1,6 +1,5 @@
 
 import {SequelizeModuleOptions} from '@nestjs/sequelize/dist/interfaces/sequelize-options.interface'
-import { Dialect } from 'sequelize/types'
 
 //const dialect=process.env.DB_DIALECT as Dialect
 export const dbConfig:SequelizeModuleOptions={
