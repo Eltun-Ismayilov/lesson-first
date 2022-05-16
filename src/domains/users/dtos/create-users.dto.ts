@@ -5,6 +5,7 @@ export class CreateUsersDto {
   //Name
   @ApiProperty({
     description: 'Name of User',
+    required: true
   })
   @IsNotEmpty()
   public name: string;
@@ -12,6 +13,7 @@ export class CreateUsersDto {
   //Lastname
   @ApiProperty({
     description: 'Lastname of User',
+    required: true
   })
   @IsNotEmpty()
   public lastname: string;
@@ -19,6 +21,7 @@ export class CreateUsersDto {
   //Patronymic
   @ApiProperty({
     description: 'Patronymic of User',
+    required: true
   })
   @IsNotEmpty()
   public patronymic: string;
@@ -26,6 +29,7 @@ export class CreateUsersDto {
   //Email
   @ApiProperty({
     description: 'Email of User',
+    required: true
   })
   @IsNotEmpty()
   @IsEmail()
@@ -34,8 +38,9 @@ export class CreateUsersDto {
   //Password
   @ApiProperty({
     description: 'Password of User',
+    required: true
   })
-  
+
   @IsNotEmpty()
   public password: string;
 }

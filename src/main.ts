@@ -15,7 +15,7 @@ async function bootstrap() {
   });  
   SwaggerInit(app); // swagger using
   GlobalPipes(app); // Validatorlari yazmaq ucun using olunmus cod.
-  await app.listen(process.env.PORT);
+  await app.listen(3000);
 }  
 bootstrap();
  
