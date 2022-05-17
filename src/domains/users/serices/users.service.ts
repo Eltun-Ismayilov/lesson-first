@@ -7,11 +7,14 @@ import { CreateUsersDto } from '../dtos/create-users.dto';
 import { UpdateUsersDto } from '../dtos/update-users.dto';
 import { LoginUserDto } from 'src/core/auth/dtos/login-user.dto';
 import { encrypt } from 'src/core/auth/hashers/encryption';
+import { generateToken } from 'src/core/helper/generate-token';
+import { Network } from 'src/core/helper/send-email';
+import { ErrorResponse } from 'src/core/common/error-response';
 
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectModel(Users) private model: typeof Users) { }
+    constructor(@InjectModel(Users) private model: typeof Users,private mailService: Network,) { }
     async Get(): Promise<Response<UsersDso[]>> {
         const users = await this.model.findAll({
             attributes: ['id', 'name', 'lastname', 'patronymic', 'email'],
@@ -32,12 +35,21 @@ export class UsersService {
         return new Response<UsersDso>(user);
     }
     async Create(user: CreateUsersDto): Promise<Response<UsersDso>> {
+        const token = await generateToken();//Token create
         const users = await this.model.create(
             {
                 ...user,
                 password: await encrypt(user.password),
-                isActive: true
+                isActive: true,
+                confirmationCode: token,
+                isEmailConfirmed: false,
             }
+        );
+        this.mailService.sendMail(
+            users.email,
+            'E-Mail Confirmation',
+            'Please Confirm your E-Mail through this',
+            token,
         );
         return new Response<Users>(users);
     }
@@ -64,5 +76,21 @@ export class UsersService {
                 isActive: true
             }
         })
+    }
+    async confirmEmail(token: string) {
+        const user = await this.model.findOne({
+          where: {
+            confirmationCode: token,
+            isActive: true,
+          },
+        });
+        const id = user.id;
+        if(user.isEmailConfirmed){
+          return new ErrorResponse(300, 'You have confirmed your E-Mail!')
+        }
+        await this.model.update(
+          { ...user, isEmailConfirmed: true },
+          { where: { id } },
+        );
     }
 }

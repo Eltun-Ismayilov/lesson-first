@@ -36,8 +36,6 @@ export class UsersController {
         return await this.service.Details(params.id);
     }
     //3
-   
-  
     @ApiOperation({
         summary: 'Create User',
         description: '[Public] Create Users',
@@ -70,4 +68,13 @@ export class UsersController {
     async delete(@Param() params) {
         return await this.service.Delete(params.id);
     }
+    @ApiOperation({
+        summary: 'Confirm User Email',
+        description: '[AuthRequired] Confirm User Email',
+      })
+      @ApiParam({ name: 'token' })
+      @Get('confirm/:token')
+      async confirm(@Param() params) {
+        return await this.service.confirmEmail(params.token);
+      }
 }

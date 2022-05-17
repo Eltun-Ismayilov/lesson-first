@@ -14,7 +14,7 @@ export class AuthService {
     ) { }
 
 
-    public async validatorser(dto: LoginUserDto) {
+    public async validatorUser(dto: LoginUserDto) {
         const user = await this.getUserByEmail(dto);
         let valid = false;
         if (user) {
@@ -29,10 +29,10 @@ export class AuthService {
 
 
     async login(dto: LoginUserDto) {
-        if (await this.validatorser(dto)) {
+        if (await this.validatorUser(dto)) {
             const user = await this.getUserByEmail(dto);
             const tokenData = new AuthUserDso(user);
-            return this.jwtService.sign({...tokenData})
+            return this.jwtService.sign({ ...tokenData })
         } else {
             throw new UnauthorizedException();
         }
