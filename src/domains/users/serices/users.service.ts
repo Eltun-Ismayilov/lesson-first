@@ -14,7 +14,7 @@ import { ErrorResponse } from 'src/core/common/error-response';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectModel(Users) private model: typeof Users,private mailService: Network,) { }
+    constructor(@InjectModel(Users) private model: typeof Users, private mailService: Network,) { }
     async Get(): Promise<Response<UsersDso[]>> {
         const users = await this.model.findAll({
             attributes: ['id', 'name', 'lastname', 'patronymic', 'email'],
@@ -34,8 +34,10 @@ export class UsersService {
         });
         return new Response<UsersDso>(user);
     }
-    async Create(user: CreateUsersDto): Promise<Response<UsersDso>> {
-        const token = await generateToken();//Token create
+    async Create(user: CreateUsersDto): Promise<Response<UsersDso> | ErrorResponse> {
+        const isEmailExist = await this.findByEmail(user);
+        if (isEmailExist) return new ErrorResponse(422, 'Email is already taken!');
+        const token = await generateToken(); //Token create
         const users = await this.model.create(
             {
                 ...user,
@@ -79,18 +81,18 @@ export class UsersService {
     }
     async confirmEmail(token: string) {
         const user = await this.model.findOne({
-          where: {
-            confirmationCode: token,
-            isActive: true,
-          },
+            where: {
+                confirmationCode: token,
+                isActive: true,
+            },
         });
         const id = user.id;
-        if(user.isEmailConfirmed){
-          return new ErrorResponse(300, 'You have confirmed your E-Mail!')
+        if (user.isEmailConfirmed) {
+            return new ErrorResponse(300, 'You have confirmed your E-Mail!')
         }
         await this.model.update(
-          { ...user, isEmailConfirmed: true },
-          { where: { id } },
+            { ...user, isEmailConfirmed: true },
+            { where: { id } },
         );
     }
 }

@@ -7,6 +7,7 @@ import { UsersModule } from './domains/users/users.module';
 import { AuthModule } from './core/auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { mailConfig } from './core/config/mail.config';
+import { MailingModule } from './core/mailing/mailing.module';
 
 
 @Module({
@@ -15,7 +16,8 @@ import { mailConfig } from './core/config/mail.config';
     GoogleRecaptchaModule.forRoot(recatchaConfig),
     MailerModule.forRoot(mailConfig),
     AuthModule,
-    UsersModule
+    UsersModule,
+    MailingModule
   ],
 })
 export class AppModule {}

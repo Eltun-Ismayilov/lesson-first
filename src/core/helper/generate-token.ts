@@ -1,9 +1,6 @@
+import * as crypto from 'crypto'
+
+
 export async function generateToken() {
-    const characters =
-      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let token = '';
-    for (let i = 0; i < 25; i++) {
-      token += characters[Math.floor(Math.random() * characters.length)];
-    }
-    return token;
-  }
+  return crypto.randomBytes(64).toString('hex')
+}

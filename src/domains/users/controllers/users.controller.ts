@@ -8,13 +8,13 @@ import { UsersService } from '../serices/users.service';
 
 
 @ApiTags('Users')
-@Controller({path:'UserController',version:'1'})
+@Controller({ path: 'UserController', version: '1' })
 
 export class UsersController {
     constructor(private service: UsersService) { }
     //1
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard) // Login olmamisansa giriw ede bilmesen. yazilmalidir 401.
     @ApiOperation({
         summary: 'List of Users',
         description: '[Public] Get list of Users',
@@ -71,10 +71,10 @@ export class UsersController {
     @ApiOperation({
         summary: 'Confirm User Email',
         description: '[AuthRequired] Confirm User Email',
-      })
-      @ApiParam({ name: 'token' })
-      @Get('confirm/:token')
-      async confirm(@Param() params) {
+    })
+    @ApiParam({ name: 'token' })
+    @Get('confirm/:token')
+    async confirm(@Param() params) {
         return await this.service.confirmEmail(params.token);
-      }
+    }
 }
